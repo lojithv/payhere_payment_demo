@@ -61,7 +61,6 @@ class _AppState extends State<App> {
     Map paymentObject = {
       "sandbox": true, // true if using Sandbox Merchant ID
       "merchant_id": "1219875", // Replace your Merchant ID
-      // "merchant_secret": "8gkMPRqsrGG8hf6Ty7zC794p86afDgmL14OcRFJpm4qk",
       "notify_url": "https://ent13zfovoz7d.x.pipedream.net/",
       "order_id": "ItemNo12345",
       "items": "Hello from Flutter!",
@@ -101,6 +100,120 @@ class _AppState extends State<App> {
     });
   }
 
+  void startRecurringPayment(BuildContext context) async {
+    Map paymentObject = {
+      "sandbox": true, // true if using Sandbox Merchant ID
+      "merchant_id": "1219875", // Replace your Merchant ID
+      "notify_url": "https://ent13zfovoz7d.x.pipedream.net/",
+      "order_id": "ItemNo12345",
+      "items": "Hello from Flutter!",
+      "item_number_1": "001",
+      "item_name_1": "Test Item #1",
+      "amount_1": 50.00,
+      "quantity_1": "1",
+      "item_number_2": "002",
+      "item_name_2": "Test Item #1",
+      "amount_2": "25.00",
+      "quantity_2": "2",
+      "amount": 100.00,
+      "recurrence": "1 Month", // Recurring payment frequency
+      "duration": "1 Year", // Recurring payment duration
+      "currency": "LKR",
+      "first_name": "Saman",
+      "last_name": "Perera",
+      "email": "samanp@gmail.com",
+      "phone": "0771234567",
+      "address": "No.1, Galle Road",
+      "city": "Colombo",
+      "country": "Sri Lanka",
+      "delivery_address": "No. 46, Galle road, Kalutara South",
+      "delivery_city": "Kalutara",
+      "delivery_country": "Sri Lanka",
+      "custom_1": "",
+      "custom_2": ""
+    };
+
+    PayHere.startPayment(paymentObject, (paymentId) {
+      print("Recurring Payment Success. Payment Id: $paymentId");
+      showAlert(context, "Payment Success!", "Payment Id: $paymentId");
+    }, (error) {
+      print("Recurring Payment Failed. Error: $error");
+      showAlert(context, "Payment Failed", "$error");
+    }, () {
+      print("Recurring Payment Dismissed");
+      showAlert(context, "Payment Dismissed", "");
+    });
+  }
+
+  void startTokenizationPayment(BuildContext context) async {
+    Map paymentObject = {
+      "sandbox": true, // true if using Sandbox Merchant ID
+      "preapprove": true, // Required
+      "merchant_id": "1219875", // Replace your Merchant ID
+      "notify_url": "https://ent13zfovoz7d.x.pipedream.net/",
+      "order_id": "ItemNo12345",
+      "items": "Hello from Flutter!",
+      "currency": "LKR",
+      "first_name": "Saman",
+      "last_name": "Perera",
+      "email": "samanp@gmail.com",
+      "phone": "0771234567",
+      "address": "No.1, Galle Road",
+      "city": "Colombo",
+      "country": "Sri Lanka",
+    };
+
+    PayHere.startPayment(paymentObject, (paymentId) {
+      print("Tokenization Payment Success. Payment Id: $paymentId");
+      showAlert(context, "Payment Success!", "Payment Id: $paymentId");
+    }, (error) {
+      print("Tokenization Payment Failed. Error: $error");
+      showAlert(context, "Payment Failed", "$error");
+    }, () {
+      print("Tokenization Payment Dismissed");
+      showAlert(context, "Payment Dismissed", "");
+    });
+  }
+
+  void startHoldOnCardPayment(BuildContext context) async {
+    Map paymentObject = {
+      "sandbox": true, // true if using Sandbox Merchant ID
+      "authorize": true, // Required
+      "merchant_id": "1219875", // Replace your Merchant ID
+      "notify_url": "https://ent13zfovoz7d.x.pipedream.net/",
+      "order_id": "ItemNo12345",
+      "items": "Hello from Flutter!",
+      "currency": "LKR",
+      "item_number_1": "001",
+      "item_name_1": "Test Item #1",
+      "amount_1": "15.00",
+      "quantity_1": "2",
+      "item_number_2": "002",
+      "item_name_2": "Test Item #2",
+      "amount_2": "20.00",
+      "quantity_2": "1",
+      "amount": "50.00",
+      "first_name": "Saman",
+      "last_name": "Perera",
+      "email": "samanp@gmail.com",
+      "phone": "0771234567",
+      "address": "No.1, Galle Road",
+      "city": "Colombo",
+      "country": "Sri Lanka",
+    };
+
+    PayHere.startPayment(paymentObject, (paymentId) {
+      print("Hold-on-Card Payment Success.");
+      showAlert(context, "Payment Success!", "");
+    }, (error) {
+      print("Hold-on-Card Payment Failed. Error: $error");
+      showAlert(context, "Payment Failed", "$error");
+    }, () {
+      print("Hold-on-Card Payment Dismissed");
+      showAlert(context, "Payment Dismissed", "");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,6 +229,21 @@ class _AppState extends State<App> {
                   startOneTimePayment(context);
                 },
                 child: Text('Start One Time Payment!')),
+            TextButton(
+                onPressed: () {
+                  startRecurringPayment(context);
+                },
+                child: Text('Start Recurring Payment!')),
+            TextButton(
+                onPressed: () {
+                  startTokenizationPayment(context);
+                },
+                child: Text('Start Tokenization Payment!')),
+            TextButton(
+                onPressed: () {
+                  startHoldOnCardPayment(context);
+                },
+                child: Text('Start Hold on Card Payment!')),
           ],
         ),
       ),
